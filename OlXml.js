@@ -6,22 +6,19 @@
 class OLXml {
 
     constructor() {
-        let currentTime = new Date();
+        this.currentTime = new Date();
     }
 
     xmlCreate(obj) {
-        let xmlDoc = new ActiveXObject("microsoft.XMLDOM");
-    
-        //선언문 <?xml version='1.0' encoding='euc-kr'?>
-        let PInode=xmlDoc.createProcessingInstruction("xml", "version='1.0' encoding='utf-8'");
-        
+        let xmlDoc = document.implementation.createDocument("", "", null); 
+
         //루트엘리먼트 song 추가와 속성 추가
         let rootNode=xmlDoc.createElement("song");
         rootNode.setAttribute("xmlns", "http://openlyrics.info/namespace/2009/song");
         rootNode.setAttribute("version", "0.8");
         rootNode.setAttribute("createdIn", "alphalef_song");
         rootNode.setAttribute("modifiedIn", "alphalef_song");
-        rootNode.setAttribute("modifiedDate", currentTime);
+        rootNode.setAttribute("modifiedDate", this.currentTime);
         
         //themes  
         let themesNode = xmlDoc.createElement("themes");
@@ -45,6 +42,7 @@ class OLXml {
             titleNode.appendChild(titleTextNode);
         }
 
+
         //copyright
         let copyrightNode = xmlDoc.createElement("copyright");
         propertiesNode.appendChild(copyrightNode);
@@ -54,12 +52,13 @@ class OLXml {
         propertiesNode.appendChild(authorsNode);
 
         let authorNode, authorTextNode;
-        for (i = 0; i < obj.properties.authors.length; i++) {
+        for (let i = 0; i < obj.properties.authors.length; i++) {
             authorNode = xmlDoc.createElement(obj.properties.authors[i].nodeName);
             authorsNode.appendChild(authorNode);
-            authorTextNode = xmlDoc.createTextNode(obj.properties.autrhos[i].textNode);
+            authorTextNode = xmlDoc.createTextNode(obj.properties.authors[i].textNode);
             authorNode.appendChild(authorTextNode);
         }
+
 
         //verse order
         let verseOderNode = xmlDoc.createElement("verseOrder");
@@ -73,12 +72,13 @@ class OLXml {
 
         //songbook
         let songbookNode;
-        for (i = 0; i < obj.songbooks.length; i++) {
-            songbookNode = xmlDoc.createElement(obj.properties.songbooks[i].nodeName);
+        for (let i = 0; i < obj.songbooks.length; i++) {
+            songbookNode = xmlDoc.createElement(obj.songbooks[i].nodeName);
             songbookNode.setAttribute("name", obj.songbooks[i].attrName);
             songbookNode.setAttribute("entry", obj.songbooks[i].attrEntry);
             songbooksNode.appendChild(songbookNode);
         }
+
 
         //lyrics
         let lyricsNode = xmlDoc.createElement("lyrics");
@@ -86,10 +86,10 @@ class OLXml {
 
         //verse
         let verseNode, linesNode, linesTextNode;
-        for (i = 0; i < obj.lyrics.length; i++) {
+        for (let i = 0; i < obj.lyrics.length; i++) {
             verseNode = xmlDoc.createElement(obj.lyrics[i].nodeName);
             verseNode.setAttribute("name", obj.lyrics[i].attrName);
-            for (j=0; i < obj.lyrics.lines.length; j++) {
+            for (let j=0; j < obj.lyrics[i].lines.length; j++) {
                 linesNode = xmlDoc.createElement("lines");
                 linesTextNode = xmlDoc.createTextNode(obj.lyrics[i].lines[j]);
                 linesNode.appendChild(linesTextNode);
@@ -97,10 +97,10 @@ class OLXml {
             }
             lyricsNode.appendChild(verseNode);
         }
+
         
         //출력
-        return xmlDoc.xml;
-        
+        console.log(rootNode);        
     }
 
 
