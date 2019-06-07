@@ -6,11 +6,11 @@
 class OLXml {
 
     constructor() {
-        this.currentTime = new Date();
+        let currentTime = new Date();
     }
 
     xmlCreate(obj) {
-        let xmlDoc=new ActiveXObject("microsoft.XMLDOM");
+        let xmlDoc = new ActiveXObject("microsoft.XMLDOM");
     
         //선언문 <?xml version='1.0' encoding='euc-kr'?>
         let PInode=xmlDoc.createProcessingInstruction("xml", "version='1.0' encoding='utf-8'");
@@ -21,7 +21,7 @@ class OLXml {
         rootNode.setAttribute("version", "0.8");
         rootNode.setAttribute("createdIn", "alphalef_song");
         rootNode.setAttribute("modifiedIn", "alphalef_song");
-        rootNode.setAttribute("modifiedDate", this.currentTime);
+        rootNode.setAttribute("modifiedDate", currentTime);
         
         //themes  
         let themesNode = xmlDoc.createElement("themes");
@@ -75,17 +75,31 @@ class OLXml {
         let songbookNode;
         for (i = 0; i < obj.songbooks.length; i++) {
             songbookNode = xmlDoc.createElement(obj.properties.songbooks[i].nodeName);
-            songbooksNode.appendChild(songbookNode);
             songbookNode.setAttribute("name", obj.songbooks[i].attrName);
             songbookNode.setAttribute("entry", obj.songbooks[i].attrEntry);
+            songbooksNode.appendChild(songbookNode);
         }
 
         //lyrics
         let lyricsNode = xmlDoc.createElement("lyrics");
         rootNode.appendChild(lyricsNode);
+
+        //verse
+        let verseNode, linesNode, linesTextNode;
+        for (i = 0; i < obj.lyrics.length; i++) {
+            verseNode = xmlDoc.createElement(obj.lyrics[i].nodeName);
+            verseNode.setAttribute("name", obj.lyrics[i].attrName);
+            for (j=0; i < obj.lyrics.lines.length; j++) {
+                linesNode = xmlDoc.createElement("lines");
+                linesTextNode = xmlDoc.createTextNode(obj.lyrics[i].lines[j]);
+                linesNode.appendChild(linesTextNode);
+                verseNode.appendChild(linesNode);
+            }
+            lyricsNode.appendChild(verseNode);
+        }
         
         //출력
-        document.all.txtResult.value=xmlDoc.xml;
+        return xmlDoc.xml;
         
     }
 

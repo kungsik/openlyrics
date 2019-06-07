@@ -55,4 +55,7 @@ let obj = {
     ]
 
 }
-console.log(obj.properties.titles.length);
+
+let newXml = new OLXml();
+let xmlResult = newXml.xmlCreate(obj);
+document.getElementById('result').innerText = xmlResult;
