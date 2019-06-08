@@ -9,6 +9,7 @@ class OLXml {
         this.currentTime = new Date();
     }
 
+    // 입력 폼을 통해 받은 값을 갖고 xml 파일을 생성함. (IE에서는 실행안됨)
     xmlCreate(obj) {
         let xmlDoc = document.implementation.createDocument("", "", null); 
 
