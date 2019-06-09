@@ -57,6 +57,5 @@ let obj = {
 }
 
 
-let newXml = new OLXml();
 // newXml.xmlCreate(obj);
 // document.getElementById('result').innerText = xmlResult;
