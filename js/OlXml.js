@@ -3,14 +3,47 @@
 // 본 스크립트를 사용하기 위해서는 자바스크립트 오브젝트 형식으로 데이터를 입력해야 합니다. 생성자에서 정의하는 요소를 참고해 주세요.
 // 제작: 김경식 (kungsik@gmail.com)
 
-class OLXml {
+class OlXml {
 
     constructor() {
         this.currentTime = new Date();
     }
 
+    formToJSON = elements => [].reduce.call(elements, (obj, element) => {
+        
+        if(element.name == 'titles' || element.name == 'authors') {
+            obj.properties[element.name][0].nodeName = element.name; 
+            obj.properties[element.name][0].textNode = element.value;
+        }
+
+        else if(element.name == 'copyright' || element.name == 'verseOrder') {
+            obj.properties[element.name].nodeName = element.name;
+            obj.properties[element.name].textNode = element.value;
+        }
+
+        else {
+            obj[element.name] = element.value;
+        }
+
+        console.log(obj);
+        // return data;
+    }, {});
+
+    handleFormSubmit = event => {
+        event.preventDefault();
+        const data = this.formToJSON(form.elements);
+        // result = this.xmlCreate(data);
+        console.log(data);
+        // return result;    
+        
+    }
+ 
     // 입력 폼을 통해 받은 값을 갖고 xml 파일을 생성함. (IE에서는 실행안됨)
+<<<<<<< HEAD
     xmlCreate(elements) {
+=======
+    xmlCreate = obj => {
+>>>>>>> 313bca7a41d18f20b832699469a0f003e9f07070
         let xmlDoc = document.implementation.createDocument("", "", null); 
 
         //루트엘리먼트 song 추가와 속성 추가
@@ -81,7 +114,6 @@ class OLXml {
             songbooksNode.appendChild(songbookNode);
         }
 
-
         //lyrics
         let lyricsNode = xmlDoc.createElement("lyrics");
         rootNode.appendChild(lyricsNode);
@@ -99,10 +131,7 @@ class OLXml {
             }
             lyricsNode.appendChild(verseNode);
         }
-
-        
-        //출력
-        console.log(rootNode);        
+        return rootNode;
     }
 
 
