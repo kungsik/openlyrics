@@ -10,7 +10,7 @@ class OLXml {
     }
 
     // 입력 폼을 통해 받은 값을 갖고 xml 파일을 생성함. (IE에서는 실행안됨)
-    xmlCreate(elements) {
+    xmlCreate(obj) {
         let xmlDoc = document.implementation.createDocument("", "", null); 
 
         //루트엘리먼트 song 추가와 속성 추가
@@ -24,7 +24,7 @@ class OLXml {
         //themes  
         let themesNode = xmlDoc.createElement("themes");
         rootNode.appendChild(themesNode);
-        let themesTextNode = xmlDoc.createTextNode(elements.theme.value);
+        let themesTextNode = xmlDoc.createTextNode(obj.themes);
         themesNode.appendChild(themesTextNode);
 
         //properties 
@@ -35,14 +35,14 @@ class OLXml {
         let titlesNode = xmlDoc.createElement("titles");
         propertiesNode.appendChild(titlesNode);
 
-        let titleNode, titleTextNode
-        let title = elements.title.value.split('|');
-        for (let i=0; i<title.length; i++) {
-            titleNode = xmlDoc.createElement("title");
+        let titleNode, titleTextNode;
+        for (let i = 0; i < obj.properties.titles.length; i ++) {
+            titleNode = xmlDoc.createElement(obj.properties.titles[i].nodeName);
             titlesNode.appendChild(titleNode);
-            titleTextNode = xmlDoc.createTextNode(title[i]);
+            titleTextNode = xmlDoc.createTextNode(obj.properties.titles[i].textNode);
             titleNode.appendChild(titleTextNode);
         }
+
 
         //copyright
         let copyrightNode = xmlDoc.createElement("copyright");
@@ -53,29 +53,28 @@ class OLXml {
         propertiesNode.appendChild(authorsNode);
 
         let authorNode, authorTextNode;
-        let author = elements.author.value.split('|');
-        for (let i = 0; i < author.length; i++) {
-            authorNode = xmlDoc.createElement("author")
+        for (let i = 0; i < obj.properties.authors.length; i++) {
+            authorNode = xmlDoc.createElement(obj.properties.authors[i].nodeName);
             authorsNode.appendChild(authorNode);
-            authorTextNode = xmlDoc.createTextNode(author[i]);
+            authorTextNode = xmlDoc.createTextNode(obj.properties.authors[i].textNode);
             authorNode.appendChild(authorTextNode);
         }
+
 
         //verse order
         let verseOderNode = xmlDoc.createElement("verseOrder");
         propertiesNode.appendChild(verseOderNode);
-        let verseOderTextNode = xmlDoc.createTextNode(elements.verseOrder.value);
+        let verseOderTextNode = xmlDoc.createTextNode(obj.properties.verseOrder);
         verseOderNode.appendChild(verseOderTextNode);
 
         // songbooks
         let songbooksNode = xmlDoc.createElement("songbooks");
         rootNode.appendChild(songbooksNode);
 
-        //songbook - 여기부터 작업
+        //songbook
         let songbookNode;
-        let songbook = elements.songbook.value.split('|');
-        for (let i = 0; i < songbook.length; i++) {
-            songbookNode = xmlDoc.createElement("songbook");
+        for (let i = 0; i < obj.songbooks.length; i++) {
+            songbookNode = xmlDoc.createElement(obj.songbooks[i].nodeName);
             songbookNode.setAttribute("name", obj.songbooks[i].attrName);
             songbookNode.setAttribute("entry", obj.songbooks[i].attrEntry);
             songbooksNode.appendChild(songbookNode);
